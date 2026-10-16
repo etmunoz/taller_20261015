@@ -473,8 +473,7 @@ def ejecutar_grafo_png():
     """Imprime Mermaid y genera el PNG oficial en la raíz del proyecto."""
     inicio = datetime.now(ZONA_HORARIA)
     try:
-        try:
-            raiz = ruta_raiz_proyecto()
+        raiz = ruta_raiz_proyecto()
         destino = raiz / "grafo_ecomarket.png"
         mermaid = app.get_graph().draw_mermaid()
         print("\n📐 Mermaid del grafo:\n")
