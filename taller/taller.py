@@ -59,9 +59,18 @@ if hasattr(sys.stdout, "reconfigure"):
 load_dotenv()
 
 
+def ruta_raiz_proyecto():
+    """Encuentra la raíz aunque el notebook se ejecute desde `taller/`."""
+    try:
+        return Path(__file__).resolve().parents[1]
+    except NameError:
+        actual = Path.cwd()
+        return actual.parent if actual.name.lower() == "taller" else actual
+
+
 def asegurar_logs():
     """Crea los dos archivos de log si todavía no existen."""
-    carpeta_logs = Path("taller")
+    carpeta_logs = ruta_raiz_proyecto() / "taller"
     carpeta_logs.mkdir(parents=True, exist_ok=True)
     for nombre in ("ejecuciones_py.log", "ejecuciones_ipynb.log"):
         (carpeta_logs / nombre).touch(exist_ok=True)
@@ -465,9 +474,7 @@ def ejecutar_grafo_png():
     inicio = datetime.now(ZONA_HORARIA)
     try:
         try:
-            raiz = Path(__file__).resolve().parents[1]
-        except NameError:
-            raiz = Path.cwd()
+            raiz = ruta_raiz_proyecto()
         destino = raiz / "grafo_ecomarket.png"
         mermaid = app.get_graph().draw_mermaid()
         print("\n📐 Mermaid del grafo:\n")
@@ -542,7 +549,7 @@ def registrar_log(
         "py": "ejecuciones_py.log",
         "ipynb": "ejecuciones_ipynb.log",
     }.get(origen, f"ejecuciones_{origen}.log")
-    ruta_log = Path("taller") / nombre_log
+    ruta_log = ruta_raiz_proyecto() / "taller" / nombre_log
     ruta_log.parent.mkdir(parents=True, exist_ok=True)
     with ruta_log.open("a", encoding="utf-8") as archivo:
         archivo.write("\n".join(lineas) + "\n")
