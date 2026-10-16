@@ -1,0 +1,20 @@
+[project]
+name = "taller-20261015"
+version = "0.1.0"
+description = "Taller EcoMarket con LangGraph"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "langchain-google-genai>=4.4.2",
+    "langgraph>=1.2.15",
+    "pydantic>=2.14.1",
+    "python-dotenv>=1.2.4",
+    "tzdata>=2026.5",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+]
