@@ -100,8 +100,8 @@ FORMAS DE EJECUCIÓN
 
 1) Modo interactivo:
    python taller/taller.py --consulta
-   Abre un menú con opciones del 1 al 7 y permite varias consultas.
-   En la opción 4, escribe /volver para regresar al menú.
+   Entra directamente al chat. Escribe /opciones para ver el menú y /salir
+   para terminar.
    La opción 7 imprime Mermaid en pantalla y genera grafo_ecomarket.png.
    Elige 0 para salir.
 
@@ -609,7 +609,7 @@ def ejecutar_ejemplos(origen="py", modo="automatico"):
 
 
 def ejecutar_interactivo():
-    """Muestra un menú y permite atender varias consultas desde la terminal."""
+    """Inicia directamente el chat; /opciones muestra el menú sin salir del chat."""
     opciones = {
         "1": ("recetas", EJEMPLOS_PRUEBA["recetas"]["entrada"]),
         "2": ("pedido", EJEMPLOS_PRUEBA["pedido"]["entrada"]),
@@ -617,64 +617,49 @@ def ejecutar_interactivo():
         "4": ("conversar", EJEMPLOS_PRUEBA["conversar"]["entrada"]),
         "5": ("ofertas_bonus", EJEMPLOS_PRUEBA["ofertas_bonus"]["entrada"]),
     }
-    print("\n=== EcoMarket · modo interactivo ===")
-    print("Selecciona una opción y escribe tu consulta.")
+    opcion_activa = None
+    print("\n=== EcoMarket · modo conversacional ===")
+    print("Escribe tu consulta directamente.")
+    print("Comandos: /opciones para ver el menú · /salir para terminar.")
     while True:
-        print("\n1. Recomendar recetas")
-        print("2. Consultar estado de pedido")
-        print("3. Consultar horarios de despacho")
-        print("4. Conversar con el asistente")
-        print("5. Consultar ofertas")
-        print("6. Escribir una consulta libre")
-        print("7. Mostrar Mermaid y generar PNG del grafo")
-        print("0. Salir")
         try:
-            opcion = input("Opción: ").strip()
+            consulta = input("Tú: ").strip()
         except EOFError:
             print("\nEntrada finalizada.")
             break
-        if opcion == "0":
+        comando = consulta.lower()
+        if comando in ("/salir", "/exit", "/quit"):
             print("Hasta luego.")
             break
-        if opcion == "6":
-            consulta = input("Escribe tu consulta: ").strip()
-            nombre = "interactivo_libre"
-        elif opcion == "7":
+        if comando == "/opciones":
+            print("""
+=== OPCIONES ESTRUCTURADAS ===
+1. Recomendar recetas
+2. Consultar estado de pedido
+3. Consultar horarios de despacho
+4. Conversar con el asistente
+5. Consultar ofertas
+6. Consulta libre
+7. Mostrar Mermaid y generar PNG del grafo
+
+Puedes elegir un número o continuar escribiendo normalmente.
+""")
+            continue
+        if consulta == "7":
             ejecutar_grafo_png()
             continue
-        elif opcion == "4":
-            print("\n=== Conversación EcoMarket ===")
-            print("Escribe /volver para regresar al menú principal.")
-            while True:
-                try:
-                    consulta = input("Tú: ").strip()
-                except EOFError:
-                    print("\nEntrada finalizada.")
-                    return
-                if consulta.lower() == "/volver":
-                    print("Regresando al menú principal.")
-                    break
-                if not consulta:
-                    print("Escribe un mensaje o /volver para salir.")
-                    continue
-                ejecutar_consulta(
-                    consulta,
-                    nombre="interactivo_conversacion",
-                    origen="py",
-                    modo="consulta",
-                )
+        if not consulta:
+            print("Escribe un mensaje, /opciones o /salir.")
             continue
-        elif opcion in opciones:
-            nombre, ejemplo = opciones[opcion]
-            consulta = input(
-                f"Escribe tu consulta (Enter usa el ejemplo: {ejemplo}): "
-            ).strip() or ejemplo
-        else:
-            print("Opción no válida. Elige un número del 0 al 7.")
+        if consulta in opciones:
+            opcion_activa, ejemplo = opciones[consulta]
+            print(f"Opción {consulta} seleccionada. Escribe tu consulta (ejemplo: {ejemplo}).")
             continue
+        nombre = f"interactivo_{opcion_activa or 'conversacion'}"
+        opcion_activa = None
         ejecutar_consulta(
             consulta,
-            nombre=f"interactivo_{nombre}",
+            nombre=nombre,
             origen="py",
             modo="consulta",
         )
