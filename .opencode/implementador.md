@@ -33,8 +33,8 @@ El taller sigue el mismo patrón de los agentes del directorio `src/`:
 - [x] `plan.json` creado.
 - [x] Carpeta `.opencode/` creada.
 - [x] `taller/taller.ipynb` generado a partir de `taller.py`.
-- [x] Notebook configurado con el kernel existente `clase-jueves-20261015`.
-- [x] Notebook con una segunda celda editable para introducir `USER_INPUT`.
+- [x] Notebook configurado con el kernel existente `taller-20261015`.
+- [x] Notebook con una cuarta celda editable para introducir `USER_INPUT`.
 - [x] Modos del `.py` expuestos como parámetros `--consulta` y `--automatico`.
 - [ ] Ejecutar `Kernel → Restart and Run All` en el notebook/plataforma.
 - [ ] Probar las cinco consultas de `plan.json` y revisar el diagrama.
